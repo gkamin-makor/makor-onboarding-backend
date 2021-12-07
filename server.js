@@ -15,15 +15,11 @@ const corsOptions = {
 app.use(express.json())
 app.use(cors(corsOptions))
 
-const contactRoutes = require('./api/contact/contact.routes')
 const onboardingRoutes = require('./api/onboarding/onboarding.routes')
-const fileRoutes = require('./api/file/file.routes')
 
 
 
-app.use('/api/contact', contactRoutes)
 app.use('/api/onboarding', onboardingRoutes)
-app.use('/api/file', fileRoutes)
 
 
 

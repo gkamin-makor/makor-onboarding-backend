@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: '5644',
-    database: 'makor',
+    database: 'compliance',
     insecureAuth: true
 });
 

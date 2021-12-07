@@ -1,10 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-const {getOnBoarding,updateOnBoarding} = require('./onboarding.controller')
+const {createOnBoarding,updateOnboarding} = require('./onboarding.controller')
+
+router.post('/',createOnBoarding)
+router.put('/:uuid',updateOnboarding)
 
 
-router.get('/:id', getOnBoarding )
-router.put('/:id', updateOnBoarding )
+
+
 
 module.exports = router

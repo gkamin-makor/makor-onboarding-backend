@@ -71,7 +71,7 @@ async function updateMondayOnBoarding(id,fieldToUpdate) {
  
        const headers= {
           'Content-Type': 'application/json',
-          'Authorization' : process.env.ACCESS_TOKEN_MONDAY
+          'Authorization' : 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjExODQwNTI1MiwidWlkIjoyMjg3NzEwNiwiaWFkIjoiMjAyMS0wNy0yNlQwODozMTo1NS4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6ODc0MzIxMSwicmduIjoidXNlMSJ9.qFOvnXjGOoKzN39no6fYTuLyfcus7gqIAplFSrQ_S04'
          }
       
        
@@ -89,7 +89,7 @@ async function updateMondayOnBoarding(id,fieldToUpdate) {
           }
           `,
           variables: {
-            boardId: +process.env.BOARD_ID_MONDAY,
+            boardId: 1951203315,
           itemName: `${name}`,
           columnValues: JSON.stringify({  })
           }
