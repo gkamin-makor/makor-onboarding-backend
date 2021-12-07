@@ -1,0 +1,26 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "production ready server",
+    "main": "server.js",
+    "scripts": {
+        "start": "set NODE_ENV=development&&nodemon server.js",
+        "server:dev": "set NODE_ENV=development&&nodemon server.js",
+        "server:prod": "set NODE_ENV=production&&node server.js"
+    },
+    "author": "Me",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.24.0",
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "multer": "^1.4.3",
+        "mysql": "^2.18.1",
+        "nodemailer": "^6.7.2"
+    },
+    "devDependencies": {
+        "cheerio": "^1.0.0-rc.10",
+        "nodemon": "1.18.10"
+    }
+}
