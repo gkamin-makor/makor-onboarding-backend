@@ -23,9 +23,19 @@ const update_onboarding_contact = (onboardingid,field,value,type) => {
     }
  }
 
+ const get_required_fields = (id) => {
+    return `SELECT email FROM onboarding_contact where onboarding_id=${id};`
+}
+
+ const get_data_to_show = (id) => {
+    return `SELECT name,email,phone,contact_position_id FROM onboarding_contact where onboarding_id=${id};`
+}
+
 
 module.exports = {
     insert_contact,
-    update_onboarding_contact
+    update_onboarding_contact,
+    get_required_fields,
+    get_data_to_show
 }
 
