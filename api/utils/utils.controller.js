@@ -109,6 +109,20 @@ async function getDialcodes(req, res) {
     }
   }
 
+  async function getLogo(req, res) {
+    try {
+
+
+  res.sendFile(__dirname + '/img.png')      
+   
+
+
+     
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+
 
 
 
@@ -120,5 +134,6 @@ async function getDialcodes(req, res) {
     getCompany,
     getProducts,
     getDialcodes,
+    getLogo
     
   }

@@ -42,7 +42,7 @@ const mailContent = (onboarding_uuid) => {
   <body>
       <center>
 
-        <img height="200" width="250" src="http://ww1.prweb.com/prfiles/2014/10/06/12225471/logo_makor_1920x1080.jpg" alt="">
+        <img height="200" width="250" src="${process.env.BASE_URL}/api/utils/logo" alt="">
 
           <p>
               Hello,
