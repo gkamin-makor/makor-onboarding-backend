@@ -19,7 +19,7 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       regulator: "text_6",
       regulation_number: "text_7",
       activity_description: "text_8",
-      contact_position_id: "text83",
+      position_id: "text83",
       name: "text1",
       email: "text5",
       phone: "text11",
@@ -27,8 +27,8 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       onboarding_has_company_entity_asset: "text_9",
     };
 
-    //getting the relevant data in case of dealing with id
 
+   
    
 
     //handle company asset
