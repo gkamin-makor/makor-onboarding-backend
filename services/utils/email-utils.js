@@ -140,7 +140,7 @@ const mailContent = (onboarding_uuid) => {
         font-size: 10px;
         text-align: left;
       }
-    </style>
+    </style>+
   </head>
   <body style="text-align:left">
     <div id="header">
@@ -148,7 +148,7 @@ const mailContent = (onboarding_uuid) => {
         <tbody>
           <tr>
             <td>
-            <div class="img-container">
+            <div style="display:flex; justify-content:flex-start; width:100vw;" class="img-container">
               <img height=250 width=400 src="https://miro.medium.com/max/1400/1*8w9Bc4E_BI0ijqd_PP09jQ.png" />
                           </div>
             </td>
@@ -175,7 +175,7 @@ const mailContent = (onboarding_uuid) => {
         Please find below a link to our onboarding form:
    </p>
    <p>
-        <a href='http://localhost:3000/${onboarding_uuid}'>Submit onboarding documentation</a>
+        <a href='${process.env.BASE_URL}/${onboarding_uuid}'>Submit onboarding documentation</a>
    </p><br />
    <p>
         Makor is fully committed to protecting client confidentiality. Makor Capital guarantees that it will ensure that all the information provided will remain strictly confidential.
