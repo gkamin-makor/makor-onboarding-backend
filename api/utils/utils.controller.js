@@ -110,6 +110,8 @@ async function getDialcodes(req, res) {
   }
 
 
+
+
   module.exports = {
     getCountries,
     getStates,
@@ -117,6 +119,6 @@ async function getDialcodes(req, res) {
     getRegulator,
     getCompany,
     getProducts,
-    getDialcodes
+    getDialcodes,
     
   }

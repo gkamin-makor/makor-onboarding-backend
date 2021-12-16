@@ -10,6 +10,7 @@ async function createOnBoarding(req, res) {
 
       
       const {name,email,phone,company} = req.body
+
       
 
       //!create on boarding on the db
@@ -52,7 +53,6 @@ async function createOnBoarding(req, res) {
 
       //send email
 
-      console.log(email);
 
       email.forEach(async email => await emailUtils.sendEmail(email,uuid.uuid))
 
@@ -117,8 +117,8 @@ async function createOnBoarding(req, res) {
 
   async function getOnboardingData(req,res){
     try{
-      
 
+      
       const {uuid} = req.params
 
       const onboardingData = await onboardingService.getOnboardingData(uuid)

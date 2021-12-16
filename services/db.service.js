@@ -1,17 +1,17 @@
 const mysql = require('mysql');
 
+
 const connection = mysql.createConnection({
-    host: process.env.HOST,
-    port: process.env.PORT,
-    user: process.env.USERNAME,
-    password: process.env.PASSWORD,
-    database: process.env.NAME,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
     insecureAuth: true
 });
 
 connection.connect(err => {
     if (err) throw new Error('mySql failed connection');
-    console.log('connected to SQL server');
 })
 
 
