@@ -8,7 +8,7 @@ router.get('/state',getStates)
 router.get('/position',getPositions)
 router.get('/regulator', getRegulator)
 router.get('/company', getCompany)
-router.get('/assets/:name', getProducts)
+router.get('/assets/:id', getProducts)
 router.get('/dialcodes', getDialcodes)
 router.get('/logo', getLogo)
 

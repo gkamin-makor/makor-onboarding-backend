@@ -58,6 +58,7 @@ async function createOnBoarding(req, res) {
 
       //send progress
 
+
       const progressCount  = await onboardingService.getProgressCount(uuid.uuid,onboardingId)
 
 
@@ -123,18 +124,24 @@ async function createOnBoarding(req, res) {
 
       const onboardingData = await onboardingService.getOnboardingData(uuid)
 
+
+      const company_uuid = await onboardingService.getCompanyUuid(onboardingData.company_id)
+
+
       const onboardingId = await onboardingService.getOnboardingId(uuid)
 
       const onboardingContactData = await onboardingContactService.getonboardingContactData(onboardingId.id)
 
-      var onboarding_has_company_entity_asset = await onboardingService.getAssets(onboardingId.id)
-      onboarding_has_company_entity_asset = onboarding_has_company_entity_asset.length? onboarding_has_company_entity_asset.map(asset => asset.name) : []
+
+      var onboarding_has_company_asset = await onboardingService.getAssets(onboardingId.id)
+      onboarding_has_company_asset = onboarding_has_company_asset.length? onboarding_has_company_asset.map(asset => asset.uuid) : []
+
+
 
       
+      const data = {...onboardingData,...onboardingContactData,onboarding_has_company_asset,company_uuid:company_uuid.uuid}
+
       
-
-
-      const data = {...onboardingData,...onboardingContactData,onboarding_has_company_entity_asset}
 
 
       //inserting name instead of id for now...
@@ -169,6 +176,14 @@ async function createOnBoarding(req, res) {
   
   
         }
+
+        if(data.company_id){
+
+          const [company] = await utilService.getTableNames('company',data.company_id)
+          data.company_id = company.name
+    
+    
+          }
 
         //gets only the name
 

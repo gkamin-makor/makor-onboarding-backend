@@ -59,6 +59,7 @@ async function getRegulator(req, res) {
 
 async function getCompany(req, res) {
     try {
+      
 
     const companies = await utilService.getCompanies()
 
@@ -75,10 +76,10 @@ async function getCompany(req, res) {
 async function getProducts(req, res) {
     try {
 
-    const {name} = req.params
+    const {id} = req.params
 
 
-    const products = await utilService.getProducts(name)
+    const products = await utilService.getProducts(id)
 
 
     res.send(products)

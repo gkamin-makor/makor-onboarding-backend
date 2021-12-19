@@ -10,13 +10,13 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
     var updatedValue;
 
     const fieldsMap = {
-      company_entity_id: "text",
+      company_id: "text",
       legal_entity_name: "text_12",
       legal_entity_identifier: "text_2",
       registration_gapi_location: "text_3",
       country_id: "text_4",
       us_state_id: "text_5",
-      regulator: "text_6",
+      regulator_id: "text_6",
       regulation_number: "text_7",
       activity_description: "text_8",
       position_id: "text83",
@@ -24,32 +24,35 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       email: "text5",
       phone: "text11",
       progress: "status",
-      onboarding_has_company_entity_asset: "text_9",
+      onboarding_has_company_asset: "text_9",
     };
 
 
-   
+
+    
    
 
     //handle company asset
 
-    if (fieldToUpdate.field === "onboarding_has_company_entity_asset") {
+    if (fieldToUpdate.field === "onboarding_has_company_asset") {
       const [onboardingId] = await dbService.runSQL(
         queries.get_id_by_uuid(uuid)
-      );
+        );
+        const data = await dbService.runSQL(
+          queries.get_company_assets(onboardingId.id)
+          );
+          
 
-      const data = await dbService.runSQL(
-        queries.get_company_assets(onboardingId.id)
-      );
-
-      const assetsIds = data.map((asset) => asset.company_entity_asset_id);
+      const assetsIds = data.map((asset) => asset.company_asset_id);
 
 
       const assetsNames = assetsIds.length? await dbService.runSQL(
         queries.get_assets_names(`${assetsIds}`)
         ) : []
+
         
       fieldToUpdate.value = assetsNames? `${assetsNames.map((asset) => asset.name)}` : []
+
     }
 
     // handle diffrent jsons
@@ -76,6 +79,7 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       updatedValue = JSON.stringify(fieldToUpdate.value);
     //int
     else updatedValue = `${fieldToUpdate.value}`;
+
 
 
     const [itemId] = await dbService.runSQL(queries.get_monday_id(uuid));
@@ -115,11 +119,14 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
 async function createMondayOnBoarding(name,email,phone,legalName,companyId,positionId) {
   try {
 
+
+
     var [company] = await dbService.runSQL(utilQueries.get_company_name(companyId))
     company = company.name
 
     var [position] = await dbService.runSQL(utilQueries.get_position_name(positionId))
     position = position.name
+
 
     const headers = {
       "Content-Type": "application/json",
@@ -145,9 +152,9 @@ async function createMondayOnBoarding(name,email,phone,legalName,companyId,posit
       },
     };
 
-    const res = await axios.post("https://api.monday.com/v2", body, {
+     const res = await axios.post("https://api.monday.com/v2", body, {
       headers,
-    });
+    })
 
     const itemId = res.data.data.create_item.id;
 

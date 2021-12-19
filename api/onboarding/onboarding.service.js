@@ -21,6 +21,7 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
 
 
 
+
     var [onboarding_id] = await dbService.runSQL(queries.get_id_by_uuid(uuid))
 
     onboarding_id = onboarding_id.id
@@ -28,13 +29,13 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
 
 
     const onboardingFields = [
-      "company_entity_id",
+      "company_id",
       "legal_entity_name",
       "legal_entity_identifier",
       "registration_gapi_location",
       "country_id",
       "us_state_id",
-      "regulator",
+      "regulator_id",
       "regulation_number",
       "activity_description",
       "monday_id"
@@ -62,18 +63,27 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
         value = id.id
       }
 
-      else if (field === 'company_entity_id' && value){
+      else if (field === 'company_id' && value){
 
           var [id] = await dbService.runSQL(utilQueries.get_company_id(value))
           value = id.id
       }
+
+      else if (field === 'regulator_id' && value){
+
+
+        var [id] = await dbService.runSQL(utilQueries.get_regulator_id(value))
+        value = id.id
+    }
         await dbService.runSQL(queries.update_onboarding(uuid,field,value,typeof value))
       return
       
     }
       //! onboarding_has_company_entity_asset table
      
-      else if (field === 'onboarding_has_company_entity_asset'){
+      else if (field === 'onboarding_has_company_asset'){
+
+        console.log(field,value);
 
       //getting the product id
 
@@ -83,11 +93,11 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
       //add company asset
 
 
-      if (isAdd) await dbService.runSQL(queries.insert_has_company_entity_asset(onboarding_id,id))
+      if (isAdd) await dbService.runSQL(queries.insert_has_company_asset(onboarding_id,id))
 
       //remove company asset
 
-      else dbService.runSQL(queries.remove_has_company_entity_asset(onboarding_id,id))
+      else dbService.runSQL(queries.remove_has_company_asset(onboarding_id,id))
       
         
       return
@@ -182,13 +192,13 @@ async function getAssets(id) {
 
     
    var assets = await dbService.runSQL(queries.get_company_assets(id))
-
-   assets = assets.map(asset => asset.company_entity_asset_id)
-
-   var assetsNames = assets.length? await dbService.runSQL(queries.get_assets_names(assets)) : []
-
    
-   return assetsNames
+
+   assets = assets.map(asset => asset.company_asset_id)
+
+   var assets_uuids = assets.length? await dbService.runSQL(queries.get_assets_uuids(assets)) : []
+
+   return assets_uuids
 
 
   } catch (err) {
@@ -205,8 +215,11 @@ async function getProgressCount(uuid,id) {
 
     const onboardingContactFieldsCount = await onboardingContactService.getRequiredFieldsCount(id)
 
-   const assetsCount = await getAssetsCount(id)
+    
+    const assetsCount = await getAssetsCount(id)
 
+    
+    
    const finalCount = onboardingFieldsCount+onboardingContactFieldsCount+assetsCount
 
    return finalCount
@@ -230,6 +243,23 @@ async function getOnboardingData(uuid) {
   }
 }
 
+async function getCompanyUuid(id) {
+  try {
+
+
+    
+  const [company_uuid] = await dbService.runSQL(queries.get_company_uuid(id))
+
+
+  return company_uuid
+
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+
 
 
 module.exports = {
@@ -241,7 +271,8 @@ module.exports = {
   getAssetsCount,
   getProgressCount,
   getOnboardingData,
-  getAssets
+  getAssets,
+  getCompanyUuid
 };
 
 

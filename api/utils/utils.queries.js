@@ -18,11 +18,15 @@ const select_regulators = () => {
 }
 
 const select_companies = () => {
-    return `SELECT name FROM company_entity;`
+    return `SELECT name,uuid FROM company;`
 }
 
 const get_company_id = (name) => {
-    return `SELECT id FROM company_entity WHERE name='${name}';`
+    return `SELECT id FROM company WHERE name='${name}';`
+}
+
+const get_company_id_by_uuid = (uuid) => {
+    return `SELECT id FROM company WHERE uuid='${uuid}';`
 }
 
 const get_products_id = (id) => {
@@ -41,8 +45,8 @@ const get_products_names = (ids) => {
     return `SELECT name FROM asset WHERE id in (${ids});`
 }
 
-const get_product_id = (name) => {
-    return `SELECT id FROM asset WHERE name='${name}';`
+const get_product_id = (uuid) => {
+    return `SELECT id FROM company_asset WHERE uuid='${uuid}';`
 }
 const select_codes = () => {
     return `SELECT dialing_code FROM country;`
@@ -56,8 +60,11 @@ const get_table_names = (table,id) => {
     return `SELECT name FROM ${table} where id=${id};`
 }
 const get_company_name = (id) => {
-    return `SELECT name FROM company_entity where id=${id};`
+    return `SELECT name FROM company where id=${id};`
 }
+
+
+
 const get_position_name = (id) => {
     return `SELECT name FROM contact_position where id=${id};`
 }
@@ -68,6 +75,22 @@ const get_products_uuid_and_name = (id) => {
     ON company_entity_asset.asset_id = asset.id
     WHERE company_entity_asset.company_entity_id = ${id};`
 }
+
+const get_regulator_id = (name) => {
+    return `
+    SELECT id FROM regulator WHERE name = '${name}'
+    `
+}
+
+const get_assets_by_company_id = (company_id) => {
+
+    return `
+      SELECT company_asset.uuid, asset.name AS asset_name, mode.name AS mode_name
+       FROM company_asset JOIN asset JOIN mode
+        ON company_asset.asset_id = asset.id AND company_asset.mode_id = mode.id
+         WHERE is_active = 1 AND company_id = ${company_id};`
+  
+  }
 
 
 
@@ -92,7 +115,10 @@ module.exports = {
     get_table_names,
     get_position_name,
     get_company_name,
-    get_products_uuid_and_name
+    get_products_uuid_and_name,
+    get_regulator_id,
+    get_assets_by_company_id,
+    get_company_id_by_uuid
 }
 
 
