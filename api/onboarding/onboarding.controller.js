@@ -3,13 +3,19 @@ const onboardingContactService = require('../onboarding-contact//onboarding-cont
 const mondayUtils = require('../../services/utils/monday-utils')
 const utilService = require('../utils/utils.service')
 const emailUtils = require('../../services/utils/email-utils')
-
+const dbService = require('../../services/db.service')
+const utilQueries = require('../utils/utils.queries')
 
 async function createOnBoarding(req, res) {
     try {
 
       
+
+
+      
       const {name,email,phone,company} = req.body
+
+
 
       
 
@@ -77,19 +83,29 @@ async function createOnBoarding(req, res) {
 
     try {
 
-      
+
+     
       const {uuid} = req.params
 
       var {fieldToUpdate} = req.body
 
 
+
+      const ip = _handleIp(req.ip)
+
+
       //! update on the db
 
-      await onboardingService.updateOnboarding(uuid,fieldToUpdate)
+
+      await onboardingService.updateOnboarding(uuid,fieldToUpdate,ip)
+
+
       
       //!update on monday
       
       await mondayUtils.updateMondayOnBoarding(uuid,fieldToUpdate)
+
+
       
      //! calculating the progress
 
@@ -132,13 +148,9 @@ async function createOnBoarding(req, res) {
 
       const onboardingContactData = await onboardingContactService.getonboardingContactData(onboardingId.id)
 
-
-      var onboarding_has_company_asset = await onboardingService.getAssets(onboardingId.id)
-      onboarding_has_company_asset = onboarding_has_company_asset.length? onboarding_has_company_asset.map(asset => asset.uuid) : []
+      const onboarding_has_company_asset = await dbService.runSQL(utilQueries.get_checked_assets_by_id(onboardingId.id))
 
 
-
-      
       const data = {...onboardingData,...onboardingContactData,onboarding_has_company_asset,company_uuid:company_uuid.uuid}
 
       
@@ -208,6 +220,29 @@ async function createOnBoarding(req, res) {
       res.status(500).send(err)
 
     }
+  }
+
+  const _handleIp = (ip) => {
+
+
+    let ip_to_save
+
+    for(let i=0; i< ip.length; i++){
+
+      let currentLetter = ip[i]
+
+      if(!isNaN(+currentLetter)) {
+
+        ip_to_save = ip.slice(i)
+
+        break;
+
+      }
+
+    }
+
+    return ip_to_save
+
   }
 
  

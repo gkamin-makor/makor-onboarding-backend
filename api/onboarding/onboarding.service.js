@@ -2,7 +2,7 @@ const dbService = require("../../services/db.service");
 const queries = require("./onboarding.queries");
 const utilQueries = require("../utils/utils.queries");
 const onboardingContactService = require('../onboarding-contact/onboarding-contact.service');
-const e = require("cors");
+const moment = require('moment')
 
 async function createOnBoarding(name, companyId) {
   try {
@@ -16,9 +16,8 @@ async function createOnBoarding(name, companyId) {
   }
 }
 
-async function updateOnboarding(uuid, {field,value,isAdd = null}) {
+async function updateOnboarding(uuid, {field,value,is_add = null},ip) {
   try {
-
 
 
 
@@ -38,8 +37,9 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
       "regulator_id",
       "regulation_number",
       "activity_description",
-      "monday_id"
+      "monday_id",
     ]
+
 
 
     //!checks with which table to work with
@@ -75,7 +75,14 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
         var [id] = await dbService.runSQL(utilQueries.get_regulator_id(value))
         value = id.id
     }
+
         await dbService.runSQL(queries.update_onboarding(uuid,field,value,typeof value))
+
+        //handle clear assets in case of switching company
+
+
+        if (field === 'company_id') await dbService.runSQL(utilQueries.clear_all_assets())
+
       return
       
     }
@@ -83,24 +90,37 @@ async function updateOnboarding(uuid, {field,value,isAdd = null}) {
      
       else if (field === 'onboarding_has_company_asset'){
 
-        console.log(field,value);
+        //getting the assets ids
 
-      //getting the product id
+        //!proceed from here!
 
-      var [id] = await dbService.runSQL(utilQueries.get_product_id(value))
-      id = id.id
+        const test = value.map(test => `"${test}"`)
+
+        var assets_ids = await dbService.runSQL(utilQueries.get_assets_ids(test))
+        assets_ids = assets_ids.map(asset => asset.asset_id)
+
 
       //add company asset
 
 
-      if (isAdd) await dbService.runSQL(queries.insert_has_company_asset(onboarding_id,id))
+      if (is_add) assets_ids.forEach(async id => await dbService.runSQL(queries.insert_has_company_asset(onboarding_id,id))) 
 
       //remove company asset
 
-      else dbService.runSQL(queries.remove_has_company_asset(onboarding_id,id))
+      else assets_ids.forEach(async id => await dbService.runSQL(queries.remove_has_company_asset(onboarding_id,id))) 
       
         
       return
+      
+    } else if (field === "is_agreed"){
+
+      const formated_timestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+
+     value? await dbService.runSQL(queries.update_agreed(uuid,formated_timestamp,ip)) : await dbService.runSQL(queries.update_agreed(uuid,null,null))
+
+
+      return
+     
       
     }
 
@@ -246,6 +266,7 @@ async function getOnboardingData(uuid) {
 async function getCompanyUuid(id) {
   try {
 
+    console.log(id);
 
     
   const [company_uuid] = await dbService.runSQL(queries.get_company_uuid(id))

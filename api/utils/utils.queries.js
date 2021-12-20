@@ -92,6 +92,25 @@ const get_assets_by_company_id = (company_id) => {
   
   }
 
+  const clear_all_assets = () => {
+      return `DELETE FROM onboarding_has_company_asset;`
+  }
+
+  const get_assets_ids = (uuids) => {
+      return `SELECT asset_id from company_asset WHERE uuid in (${uuids})`
+  }
+
+  const get_checked_assets_by_id = (id) => {
+      return `select company_asset.uuid 
+      from company_asset join onboarding_has_company_asset
+      on company_asset.id = onboarding_has_company_asset.company_asset_id
+      WHERE onboarding_has_company_asset.onboarding_id = ${id}`
+  }
+
+
+
+
+
 
 
 
@@ -118,7 +137,10 @@ module.exports = {
     get_products_uuid_and_name,
     get_regulator_id,
     get_assets_by_company_id,
-    get_company_id_by_uuid
+    get_company_id_by_uuid,
+    clear_all_assets,
+    get_assets_ids,
+    get_checked_assets_by_id
 }
 
 

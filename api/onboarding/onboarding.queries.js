@@ -87,6 +87,10 @@ const get_company_uuid = (id) => {
     where onboarding.company_id =${id};`
 }
 
+const update_agreed = (uuid,timestamp,ip) => {
+    return `UPDATE onboarding SET agreed_at=${ timestamp? `'${timestamp}'` : null    }, agreed_ip=${ ip? `'${ip}'` : null    } WHERE uuid='${uuid}'`
+}
+
 
 
 
@@ -108,7 +112,8 @@ module.exports = {
     get_data_to_show,
     remove_has_company_asset,
     get_assets_uuids,
-    get_company_uuid
+    get_company_uuid,
+    update_agreed
 }
 
 

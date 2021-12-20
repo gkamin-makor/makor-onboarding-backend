@@ -6,7 +6,7 @@ const utilQueries = require("../../api/utils/utils.queries");
 async function updateMondayOnBoarding(uuid, fieldToUpdate) {
   try {
 
-    
+
     var updatedValue;
 
     const fieldsMap = {
@@ -25,14 +25,13 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       phone: "text11",
       progress: "status",
       onboarding_has_company_asset: "text_9",
+      is_agreed: "status0"
     };
 
 
 
-    
-   
 
-    //handle company asset
+    //handle company asset and agreed
 
     if (fieldToUpdate.field === "onboarding_has_company_asset") {
       const [onboardingId] = await dbService.runSQL(
@@ -53,6 +52,8 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
         
       fieldToUpdate.value = assetsNames? `${assetsNames.map((asset) => asset.name)}` : []
 
+    } else if(fieldToUpdate.field === "is_agreed"){
+      fieldToUpdate.value = fieldToUpdate.value? "✔" : "✖"
     }
 
     // handle diffrent jsons
@@ -82,8 +83,10 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
 
 
 
+
     const [itemId] = await dbService.runSQL(queries.get_monday_id(uuid));
 
+        
     const headers = {
       "Content-Type": "application/json",
       Authorization: process.env.TOKEN,
@@ -110,7 +113,7 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       },
     };
 
-    await axios.post("https://api.monday.com/v2", body, { headers });
+     axios.post("https://api.monday.com/v2", body, { headers }).catch(err => console.log(err))
   } catch (err) {
     throw err;
   }
