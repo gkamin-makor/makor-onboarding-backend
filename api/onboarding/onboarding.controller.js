@@ -148,12 +148,12 @@ async function createOnBoarding(req, res) {
 
       const onboardingContactData = await onboardingContactService.getonboardingContactData(onboardingId.id)
 
-      const onboarding_has_company_asset = await dbService.runSQL(utilQueries.get_checked_assets_by_id(onboardingId.id))
+      var onboarding_has_company_asset = await dbService.runSQL(utilQueries.get_checked_assets_by_id(onboardingId.id))
+
+      onboarding_has_company_asset = onboarding_has_company_asset.map(asset => asset.uuid)
 
 
       const data = {...onboardingData,...onboardingContactData,onboarding_has_company_asset,company_uuid:company_uuid.uuid}
-
-      
 
 
       //inserting name instead of id for now...

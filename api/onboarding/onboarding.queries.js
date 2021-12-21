@@ -10,6 +10,7 @@ const update_to_null = (uuid, field) => {
 const update_onboarding = (uuid,field,value,type) => {
 
 
+
    switch(type){
 
        case 'number':
@@ -24,7 +25,7 @@ const update_onboarding = (uuid,field,value,type) => {
        case 'object':
 
 
-        return `UPDATE onboarding set ${field}= ${value? `${JSON.stringify(value)}` : null} WHERE uuid='${uuid}'`
+        return `UPDATE onboarding set ${field}= ${value? `'${JSON.stringify(value)}'` : null} WHERE uuid='${uuid}'`
 
 
    }
@@ -32,7 +33,7 @@ const update_onboarding = (uuid,field,value,type) => {
 
 const insert_has_company_asset = (onboardingId,assetId) => {
     return `
-    INSERT INTO onboarding_has_company_asset(onboarding_id,company_asset_id) VALUES(${onboardingId},${assetId});`
+    INSERT INTO onboarding_has_company_asset(onboarding_id,company_asset_id) VALUES(${onboardingId},${assetId}) ON DUPLICATE KEY UPDATE onboarding_id=${onboardingId},company_asset_id=${assetId};`
 }
 
 const remove_has_company_asset = (onboardingId,assetId) => {

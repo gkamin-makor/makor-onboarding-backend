@@ -20,7 +20,6 @@ async function updateOnboarding(uuid, {field,value,is_add = null},ip) {
   try {
 
 
-
     var [onboarding_id] = await dbService.runSQL(queries.get_id_by_uuid(uuid))
 
     onboarding_id = onboarding_id.id
@@ -92,22 +91,26 @@ async function updateOnboarding(uuid, {field,value,is_add = null},ip) {
 
         //getting the assets ids
 
-        //!proceed from here!
 
         const test = value.map(test => `"${test}"`)
 
+
         var assets_ids = await dbService.runSQL(utilQueries.get_assets_ids(test))
-        assets_ids = assets_ids.map(asset => asset.asset_id)
+        assets_ids = assets_ids.map(asset => {
+          return asset.id
+        })
 
 
       //add company asset
 
 
-      if (is_add) assets_ids.forEach(async id => await dbService.runSQL(queries.insert_has_company_asset(onboarding_id,id))) 
+      if (is_add) assets_ids.forEach(async id => await dbService.runSQL(queries.insert_has_company_asset(onboarding_id,id))
+      ) 
 
       //remove company asset
 
-      else assets_ids.forEach(async id => await dbService.runSQL(queries.remove_has_company_asset(onboarding_id,id))) 
+      else assets_ids.forEach(async id => await dbService.runSQL(queries.remove_has_company_asset(onboarding_id,id))
+      ) 
       
         
       return
@@ -134,7 +137,6 @@ async function updateOnboarding(uuid, {field,value,is_add = null},ip) {
               value  = id.id
             }
             
-        
             await onboardingContactService.updateOnboardingContact(onboarding_id,field,value,typeof value)
           }
 

@@ -31,7 +31,7 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
 
 
 
-    //handle company asset and agreed
+    //!handle company asset and agreed
 
     if (fieldToUpdate.field === "onboarding_has_company_asset") {
       const [onboardingId] = await dbService.runSQL(
@@ -56,7 +56,7 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
       fieldToUpdate.value = fieldToUpdate.value? "✔" : "✖"
     }
 
-    // handle diffrent jsons
+    //! handle diffrent jsons
 
     switch (fieldToUpdate.field) {
       case "registration_gapi_location":
@@ -68,9 +68,11 @@ async function updateMondayOnBoarding(uuid, fieldToUpdate) {
         break;
 
       case "phone":
-        fieldToUpdate.value = `${fieldToUpdate.value}`;
+        fieldToUpdate.value = `${fieldToUpdate.value.map(phone => phone.dialing_code + '-' + phone.number + ',')}`
         break;
     }
+
+    //!handle diffrent types
 
     //string
     if (typeof fieldToUpdate.value === "string")

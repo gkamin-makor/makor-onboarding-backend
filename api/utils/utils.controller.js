@@ -114,7 +114,7 @@ async function getDialcodes(req, res) {
     try {
 
 
-  res.sendFile(__dirname + '/img.png')      
+  res.sendFile(__dirname + '\\img.png')      
    
 
 

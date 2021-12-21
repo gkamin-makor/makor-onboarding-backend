@@ -59,6 +59,7 @@ const get_position_id = (name) => {
 const get_table_names = (table,id) => {
     return `SELECT name FROM ${table} where id=${id};`
 }
+
 const get_company_name = (id) => {
     return `SELECT name FROM company where id=${id};`
 }
@@ -97,7 +98,7 @@ const get_assets_by_company_id = (company_id) => {
   }
 
   const get_assets_ids = (uuids) => {
-      return `SELECT asset_id from company_asset WHERE uuid in (${uuids})`
+      return `SELECT id from company_asset WHERE uuid in (${uuids})`
   }
 
   const get_checked_assets_by_id = (id) => {

@@ -58,7 +58,7 @@ const mailContent = (onboarding_uuid) => {
               <br>
               Please find below a link to our onboarding form:
               <br>
-              <a href='${process.env.BASE_URL}/${onboarding_uuid}'>Submit onboarding documentation</a>
+              <a href='${process.env.FRONT_URL}/${onboarding_uuid}'>Submit onboarding documentation</a>
               <br>
               <br>
               Makor is fully committed to protecting client confidentiality.
